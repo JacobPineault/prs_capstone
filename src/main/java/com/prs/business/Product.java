@@ -1,6 +1,11 @@
 package com.prs.business;
 
+import javax.persistence.*;
+
+@Entity
 public class Product {
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	private int vendorId;
 	private String partNumber;

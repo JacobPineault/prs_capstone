@@ -41,13 +41,11 @@ public class UserController {
 		}
 		return jr;
 	}
-	
 
 	@PostMapping("/")
 	public JsonResponse createUser(@RequestBody User u) {
 		JsonResponse jr = null;	
 		try {
-			// access movieRepo to save new instance of a
 			u = userRepo.save(u);
 			jr = JsonResponse.getInstance(u);
 		} 		
@@ -62,7 +60,6 @@ public class UserController {
 		return jr;
 	}
 	
-	// PUT
 	@PutMapping("/")
 	public JsonResponse updateUser(@RequestBody User u) {
 		JsonResponse jr = null;	
@@ -81,13 +78,12 @@ public class UserController {
 		JsonResponse jr = null;	
 		try {
 			userRepo.deleteById(id);
-			jr = JsonResponse.getInstance("User ID: " + id + " deleted successfully.");
+			jr = JsonResponse.getInstance("User with ID: " + id + " deleted successfully.");
 		} catch (Exception e) {
 			jr = JsonResponse.getErrorInstance("Error deleting user: "+e.getMessage());
 			e.printStackTrace();
 		}
 		return jr;	
 	}
-	
 	
 }
