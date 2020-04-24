@@ -1,5 +1,6 @@
 package com.prs.web;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,10 +15,10 @@ import com.prs.db.RequestRepository;
 @RestController
 @RequestMapping("/requests")
 public class RequestController {
-	
+
 	@Autowired
 	private RequestRepository requestRepo;
-	
+
 	@GetMapping("/")
 	public JsonResponse list() {
 		JsonResponse jr = null;
@@ -29,61 +30,60 @@ public class RequestController {
 		}
 		return jr;
 	}
-	
+
 	@GetMapping("/{id}")
 	public JsonResponse get(@PathVariable int id) {
 		JsonResponse jr = null;
 		Optional<Request> request = requestRepo.findById(id);
 		if (request.isPresent()) {
 			jr = JsonResponse.getInstance(request.get());
-		}
-		else {
+		} else {
 			jr = JsonResponse.getErrorInstance("No request found for ID: " + id);
 		}
 		return jr;
-	}	
+	}
 
 	@PostMapping("/")
 	public JsonResponse createRequest(@RequestBody Request r) {
-		JsonResponse jr = null;	
+		JsonResponse jr = null;
 		try {
+			r.setStatus("New");
+			r.setSubmittedDate(LocalDate.now());
 			r = requestRepo.save(r);
 			jr = JsonResponse.getInstance(r);
-		} 		
-		catch (DataIntegrityViolationException dive) {
+		} catch (DataIntegrityViolationException dive) {
 			jr = JsonResponse.getErrorInstance(dive.getRootCause().getMessage());
 			dive.printStackTrace();
-		}
-		catch (Exception e) {
-			jr = JsonResponse.getErrorInstance("Error creating request: "+e.getMessage());
+		} catch (Exception e) {
+			jr = JsonResponse.getErrorInstance("Error creating request: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return jr;
 	}
-	
+
 	@PutMapping("/")
 	public JsonResponse updateProduct(@RequestBody Request r) {
-		JsonResponse jr = null;	
+		JsonResponse jr = null;
 		try {
 			r = requestRepo.save(r);
 			jr = JsonResponse.getInstance(r);
 		} catch (Exception e) {
-			jr = JsonResponse.getErrorInstance("Error updating request: "+e.getMessage());
+			jr = JsonResponse.getErrorInstance("Error updating request: " + e.getMessage());
 			e.printStackTrace();
 		}
-		return jr;		
+		return jr;
 	}
-	
+
 	@DeleteMapping("/{id}")
 	public JsonResponse deleteRequest(@PathVariable int id) {
-		JsonResponse jr = null;	
+		JsonResponse jr = null;
 		try {
 			requestRepo.deleteById(id);
 			jr = JsonResponse.getInstance("Request with ID: " + id + " deleted successfully.");
 		} catch (Exception e) {
-			jr = JsonResponse.getErrorInstance("Error deleting request: "+e.getMessage());
+			jr = JsonResponse.getErrorInstance("Error deleting request: " + e.getMessage());
 			e.printStackTrace();
 		}
-		return jr;	
+		return jr;
 	}
 }

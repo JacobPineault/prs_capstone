@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Entity
 public class Vendor {
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String code;
 	private String name;
@@ -16,7 +16,7 @@ public class Vendor {
 	private String zipCode;
 	private String phoneNumber;
 	private String email;
-	
+
 	public Vendor(int id, String code, String name, String address, String city, String state, String zipCode,
 			String phoneNumber, String email) {
 		super();

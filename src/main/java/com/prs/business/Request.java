@@ -1,32 +1,47 @@
 package com.prs.business;
 
+import java.time.LocalDate;
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Request {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
-	private int userId;
+	@ManyToOne
+	@JoinColumn(name = "userID")
+	private User user;
 	private String description;
 	private String justification;
 	private Date dateNeeded;
 	private String deliveryMode;
 	private String status;
 	private double total;
-	private Date submittedDate;
+	private LocalDate submittedDate;
 	private String reasonForRejection;
 	
-	public Request(int id, int userId, String description, String justification, Date dateNeeded, String deliveryMode,
-			String status, double total, Date submittedDate, String reasonForRejection) {
+	public Request(int id, User user, String description, String justification, Date dateNeeded, String deliveryMode,
+			String status, double total, LocalDate submittedDate, String reasonForRejection) {
 		super();
 		this.id = id;
-		this.userId = userId;
+		this.user = user;
+		this.description = description;
+		this.justification = justification;
+		this.dateNeeded = dateNeeded;
+		this.deliveryMode = deliveryMode;
+		this.status = status;
+		this.total = total;
+		this.submittedDate = submittedDate;
+		this.reasonForRejection = reasonForRejection;
+	}
+	
+
+	public Request(User user, String description, String justification, Date dateNeeded, String deliveryMode,
+			String status, double total, LocalDate submittedDate, String reasonForRejection) {
+		super();
+		this.user = user;
 		this.description = description;
 		this.justification = justification;
 		this.dateNeeded = dateNeeded;
@@ -49,12 +64,12 @@ public class Request {
 		this.id = id;
 	}
 
-	public int getUserId() {
-		return userId;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public String getDescription() {
@@ -105,12 +120,12 @@ public class Request {
 		this.total = total;
 	}
 
-	public Date getSubmittedDate() {
+	public LocalDate getSubmittedDate() {
 		return submittedDate;
 	}
 
-	public void setSubmittedDate(Date submittedDate) {
-		this.submittedDate = submittedDate;
+	public void setSubmittedDate(LocalDate localDate) {
+		this.submittedDate = localDate;
 	}
 
 	public String getReasonForRejection() {
@@ -123,7 +138,7 @@ public class Request {
 
 	@Override
 	public String toString() {
-		return "Request [id=" + id + ", userId=" + userId + ", description=" + description + ", justification="
+		return "Request [id=" + id + ", User=" + user + ", description=" + description + ", justification="
 				+ justification + ", dateNeeded=" + dateNeeded + ", deliveryMode=" + deliveryMode + ", status=" + status
 				+ ", total=" + total + ", submittedDate=" + submittedDate + ", reasonForRejection="
 				+ reasonForRejection + "]";

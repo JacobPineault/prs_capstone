@@ -3,10 +3,10 @@ package com.prs.business;
 import javax.persistence.*;
 
 @Entity
-public class User { 
+public class User {
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id; 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 	private String userName;
 	private String password;
 	private String firstName;
@@ -14,7 +14,7 @@ public class User {
 	private String phoneNumber;
 	private String email;
 	@Column(name = "isReviewer")
-	private boolean reviewer; 
+	private boolean reviewer;
 	@Column(name = "isAdmin")
 	private boolean admin;
 
@@ -30,7 +30,6 @@ public class User {
 		this.email = email;
 		this.reviewer = reviewer;
 		this.admin = admin;
-
 	}
 
 	public User(String userName, String password, String firstName, String lastName, String phoneNumber, String email,
