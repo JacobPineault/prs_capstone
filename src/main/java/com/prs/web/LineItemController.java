@@ -14,10 +14,10 @@ import com.prs.db.LineItemRepository;
 @RestController
 @RequestMapping("/lineItems")
 public class LineItemController {
-	
+
 	@Autowired
 	private LineItemRepository lineItemRepo;
-	
+
 	@GetMapping("/")
 	public JsonResponse list() {
 		JsonResponse jr = null;
@@ -29,61 +29,58 @@ public class LineItemController {
 		}
 		return jr;
 	}
-	
+
 	@GetMapping("/{id}")
 	public JsonResponse get(@PathVariable int id) {
 		JsonResponse jr = null;
 		Optional<LineItem> lineItem = lineItemRepo.findById(id);
 		if (lineItem.isPresent()) {
 			jr = JsonResponse.getInstance(lineItem.get());
-		}
-		else {
+		} else {
 			jr = JsonResponse.getErrorInstance("No line item found for ID: " + id);
 		}
 		return jr;
-	}	
+	}
 
 	@PostMapping("/")
 	public JsonResponse createLineItem(@RequestBody LineItem li) {
-		JsonResponse jr = null;	
+		JsonResponse jr = null;
 		try {
 			li = lineItemRepo.save(li);
 			jr = JsonResponse.getInstance(li);
-		} 		
-		catch (DataIntegrityViolationException dive) {
+		} catch (DataIntegrityViolationException dive) {
 			jr = JsonResponse.getErrorInstance(dive.getRootCause().getMessage());
 			dive.printStackTrace();
-		}
-		catch (Exception e) {
-			jr = JsonResponse.getErrorInstance("Error creating line item: "+e.getMessage());
+		} catch (Exception e) {
+			jr = JsonResponse.getErrorInstance("Error creating line item: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return jr;
 	}
-	
+
 	@PutMapping("/")
 	public JsonResponse updateLineItem(@RequestBody LineItem li) {
-		JsonResponse jr = null;	
+		JsonResponse jr = null;
 		try {
 			li = lineItemRepo.save(li);
 			jr = JsonResponse.getInstance(li);
 		} catch (Exception e) {
-			jr = JsonResponse.getErrorInstance("Error updating line item: "+e.getMessage());
+			jr = JsonResponse.getErrorInstance("Error updating line item: " + e.getMessage());
 			e.printStackTrace();
 		}
-		return jr;		
+		return jr;
 	}
-	
+
 	@DeleteMapping("/{id}")
 	public JsonResponse deleteLineItem(@PathVariable int id) {
-		JsonResponse jr = null;	
+		JsonResponse jr = null;
 		try {
 			lineItemRepo.deleteById(id);
 			jr = JsonResponse.getInstance("Line item with ID: " + id + " deleted successfully.");
 		} catch (Exception e) {
-			jr = JsonResponse.getErrorInstance("Error deleting line item: "+e.getMessage());
+			jr = JsonResponse.getErrorInstance("Error deleting line item: " + e.getMessage());
 			e.printStackTrace();
 		}
-		return jr;	
+		return jr;
 	}
 }

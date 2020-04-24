@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Entity
 public class Product {
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@ManyToOne
 	@JoinColumn(name = "vendorId")
@@ -15,7 +15,7 @@ public class Product {
 	private double price;
 	private String unit;
 	private String photoPath;
-	
+
 	public Product(int id, Vendor vendor, String partNumber, String name, double price, String unit, String photoPath) {
 		super();
 		this.id = id;
@@ -99,8 +99,8 @@ public class Product {
 
 	@Override
 	public String toString() {
-		return "Product [id=" + id + ", Vendor=" + vendor + ", partNumber=" + partNumber + ", name=" + name
-				+ ", price=" + price + ", unit=" + unit + ", photoPath=" + photoPath + "]";
+		return "Product [id=" + id + ", Vendor=" + vendor + ", partNumber=" + partNumber + ", name=" + name + ", price="
+				+ price + ", unit=" + unit + ", photoPath=" + photoPath + "]";
 	}
-	
+
 }

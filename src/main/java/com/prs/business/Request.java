@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 public class Request {
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@ManyToOne
 	@JoinColumn(name = "userID")
@@ -21,7 +21,7 @@ public class Request {
 	private double total;
 	private LocalDate submittedDate;
 	private String reasonForRejection;
-	
+
 	public Request(int id, User user, String description, String justification, Date dateNeeded, String deliveryMode,
 			String status, double total, LocalDate submittedDate, String reasonForRejection) {
 		super();
@@ -36,7 +36,6 @@ public class Request {
 		this.submittedDate = submittedDate;
 		this.reasonForRejection = reasonForRejection;
 	}
-	
 
 	public Request(User user, String description, String justification, Date dateNeeded, String deliveryMode,
 			String status, double total, LocalDate submittedDate, String reasonForRejection) {
@@ -140,8 +139,8 @@ public class Request {
 	public String toString() {
 		return "Request [id=" + id + ", User=" + user + ", description=" + description + ", justification="
 				+ justification + ", dateNeeded=" + dateNeeded + ", deliveryMode=" + deliveryMode + ", status=" + status
-				+ ", total=" + total + ", submittedDate=" + submittedDate + ", reasonForRejection="
-				+ reasonForRejection + "]";
+				+ ", total=" + total + ", submittedDate=" + submittedDate + ", reasonForRejection=" + reasonForRejection
+				+ "]";
 	}
 
 }

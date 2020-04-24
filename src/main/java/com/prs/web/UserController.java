@@ -16,7 +16,7 @@ import com.prs.db.UserRepository;
 public class UserController {
 	@Autowired
 	private UserRepository userRepo;
-	
+
 	@GetMapping("/")
 	public JsonResponse list() {
 		JsonResponse jr = null;
@@ -28,15 +28,14 @@ public class UserController {
 		}
 		return jr;
 	}
-	
+
 	@GetMapping("/{id}")
 	public JsonResponse get(@PathVariable int id) {
 		JsonResponse jr = null;
 		Optional<User> actor = userRepo.findById(id);
 		if (actor.isPresent()) {
 			jr = JsonResponse.getInstance(actor.get());
-		}
-		else {
+		} else {
 			jr = JsonResponse.getErrorInstance("No user found for ID: " + id);
 		}
 		return jr;
@@ -44,46 +43,44 @@ public class UserController {
 
 	@PostMapping("/")
 	public JsonResponse createUser(@RequestBody User u) {
-		JsonResponse jr = null;	
+		JsonResponse jr = null;
 		try {
 			u = userRepo.save(u);
 			jr = JsonResponse.getInstance(u);
-		} 		
-		catch (DataIntegrityViolationException dive) {
+		} catch (DataIntegrityViolationException dive) {
 			jr = JsonResponse.getErrorInstance(dive.getRootCause().getMessage());
 			dive.printStackTrace();
-		}
-		catch (Exception e) {
-			jr = JsonResponse.getErrorInstance("Error creating user: "+e.getMessage());
+		} catch (Exception e) {
+			jr = JsonResponse.getErrorInstance("Error creating user: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return jr;
 	}
-	
+
 	@PutMapping("/")
 	public JsonResponse updateUser(@RequestBody User u) {
-		JsonResponse jr = null;	
+		JsonResponse jr = null;
 		try {
 			u = userRepo.save(u);
 			jr = JsonResponse.getInstance(u);
 		} catch (Exception e) {
-			jr = JsonResponse.getErrorInstance("Error updating user: "+e.getMessage());
+			jr = JsonResponse.getErrorInstance("Error updating user: " + e.getMessage());
 			e.printStackTrace();
 		}
-		return jr;		
+		return jr;
 	}
-	
+
 	@DeleteMapping("/{id}")
 	public JsonResponse deleteUser(@PathVariable int id) {
-		JsonResponse jr = null;	
+		JsonResponse jr = null;
 		try {
 			userRepo.deleteById(id);
 			jr = JsonResponse.getInstance("User with ID: " + id + " deleted successfully.");
 		} catch (Exception e) {
-			jr = JsonResponse.getErrorInstance("Error deleting user: "+e.getMessage());
+			jr = JsonResponse.getErrorInstance("Error deleting user: " + e.getMessage());
 			e.printStackTrace();
 		}
-		return jr;	
+		return jr;
 	}
-	
+
 }

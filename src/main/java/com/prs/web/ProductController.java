@@ -13,11 +13,11 @@ import com.prs.db.ProductRepository;
 
 @RestController
 @RequestMapping("/products")
-public class ProductController {	
-	
+public class ProductController {
+
 	@Autowired
 	private ProductRepository productRepo;
-	
+
 	@GetMapping("/")
 	public JsonResponse list() {
 		JsonResponse jr = null;
@@ -29,62 +29,59 @@ public class ProductController {
 		}
 		return jr;
 	}
-	
+
 	@GetMapping("/{id}")
 	public JsonResponse get(@PathVariable int id) {
 		JsonResponse jr = null;
 		Optional<Product> product = productRepo.findById(id);
 		if (product.isPresent()) {
 			jr = JsonResponse.getInstance(product.get());
-		}
-		else {
+		} else {
 			jr = JsonResponse.getErrorInstance("No products found for ID: " + id);
 		}
 		return jr;
-	}	
+	}
 
 	@PostMapping("/")
 	public JsonResponse createProduct(@RequestBody Product p) {
-		JsonResponse jr = null;	
+		JsonResponse jr = null;
 		try {
 			p = productRepo.save(p);
 			jr = JsonResponse.getInstance(p);
-		} 		
-		catch (DataIntegrityViolationException dive) {
+		} catch (DataIntegrityViolationException dive) {
 			jr = JsonResponse.getErrorInstance(dive.getRootCause().getMessage());
 			dive.printStackTrace();
-		}
-		catch (Exception e) {
-			jr = JsonResponse.getErrorInstance("Error creating product: "+e.getMessage());
+		} catch (Exception e) {
+			jr = JsonResponse.getErrorInstance("Error creating product: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return jr;
 	}
-	
+
 	@PutMapping("/")
 	public JsonResponse updateProduct(@RequestBody Product p) {
-		JsonResponse jr = null;	
+		JsonResponse jr = null;
 		try {
 			p = productRepo.save(p);
 			jr = JsonResponse.getInstance(p);
 		} catch (Exception e) {
-			jr = JsonResponse.getErrorInstance("Error updating product: "+e.getMessage());
+			jr = JsonResponse.getErrorInstance("Error updating product: " + e.getMessage());
 			e.printStackTrace();
 		}
-		return jr;		
+		return jr;
 	}
-	
+
 	@DeleteMapping("/{id}")
 	public JsonResponse deleteProduct(@PathVariable int id) {
-		JsonResponse jr = null;	
+		JsonResponse jr = null;
 		try {
 			productRepo.deleteById(id);
 			jr = JsonResponse.getInstance("Product with ID: " + id + " deleted successfully.");
 		} catch (Exception e) {
-			jr = JsonResponse.getErrorInstance("Error deleting product: "+e.getMessage());
+			jr = JsonResponse.getErrorInstance("Error deleting product: " + e.getMessage());
 			e.printStackTrace();
 		}
-		return jr;	
+		return jr;
 	}
-	
+
 }
