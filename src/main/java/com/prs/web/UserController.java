@@ -83,4 +83,16 @@ public class UserController {
 		return jr;
 	}
 
+	@PostMapping("/login")
+	public JsonResponse login(@RequestBody User u) {
+		JsonResponse jr = null;
+		Optional<User> user = userRepo.findByUserNameAndPassword(u.getUserName(), u.getPassword());
+		if (user.isPresent()) {
+			jr = JsonResponse.getInstance(user.get());
+		} else {
+			jr = JsonResponse.getErrorInstance("Invalid username/password combination. Try again.");
+		}
+		return jr;
+	}
+
 }
