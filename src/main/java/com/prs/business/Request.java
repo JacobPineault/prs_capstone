@@ -2,20 +2,28 @@ package com.prs.business;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Request {
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	private int userId;
 	private String description;
 	private String justification;
-	private Date dateNeeded; // check if sql package is required
+	private Date dateNeeded;
 	private String deliveryMode;
 	private String status;
-	private double totale;
-	private Date submittedDate; // datetime
+	private double total;
+	private Date submittedDate;
 	private String reasonForRejection;
 	
 	public Request(int id, int userId, String description, String justification, Date dateNeeded, String deliveryMode,
-			String status, double totale, Date submittedDate, String reasonForRejection) {
+			String status, double total, Date submittedDate, String reasonForRejection) {
 		super();
 		this.id = id;
 		this.userId = userId;
@@ -24,7 +32,7 @@ public class Request {
 		this.dateNeeded = dateNeeded;
 		this.deliveryMode = deliveryMode;
 		this.status = status;
-		this.totale = totale;
+		this.total = total;
 		this.submittedDate = submittedDate;
 		this.reasonForRejection = reasonForRejection;
 	}
@@ -89,12 +97,12 @@ public class Request {
 		this.status = status;
 	}
 
-	public double getTotale() {
-		return totale;
+	public double getTotal() {
+		return total;
 	}
 
-	public void setTotale(double totale) {
-		this.totale = totale;
+	public void setTotal(double total) {
+		this.total = total;
 	}
 
 	public Date getSubmittedDate() {
@@ -117,7 +125,7 @@ public class Request {
 	public String toString() {
 		return "Request [id=" + id + ", userId=" + userId + ", description=" + description + ", justification="
 				+ justification + ", dateNeeded=" + dateNeeded + ", deliveryMode=" + deliveryMode + ", status=" + status
-				+ ", totale=" + totale + ", submittedDate=" + submittedDate + ", reasonForRejection="
+				+ ", total=" + total + ", submittedDate=" + submittedDate + ", reasonForRejection="
 				+ reasonForRejection + "]";
 	}
 
