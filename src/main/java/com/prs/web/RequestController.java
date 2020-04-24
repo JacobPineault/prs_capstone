@@ -86,4 +86,29 @@ public class RequestController {
 		}
 		return jr;
 	}
+
+	@PutMapping("/submit-review")
+	public JsonResponse submitRequestForReview(@RequestBody Request r) {
+		JsonResponse jr = null;
+		try {
+			if (requestRepo.existsById(r.getId())) {
+				if (r.getTotal() <= 50.00) {
+					r.setStatus("Approved");
+					r.setSubmittedDate(LocalDate.now());
+				} else {
+					r.setStatus("Review");
+					r.setSubmittedDate(LocalDate.now());
+				}
+				jr = JsonResponse.getInstance(requestRepo.save(r));
+			} else {
+				jr = JsonResponse.getInstance(
+						"PurchaseRequest ID: " + r.getId() + " does not exist and you are attempting to save it");
+			}
+
+		} catch (Exception e) {
+			jr = JsonResponse.getInstance(e);
+		}
+		return jr;
+	}
+
 }

@@ -12,7 +12,7 @@ import com.prs.business.LineItem;
 import com.prs.db.LineItemRepository;
 
 @RestController
-@RequestMapping("/lineItems")
+@RequestMapping("/line-items")
 public class LineItemController {
 
 	@Autowired
@@ -83,4 +83,13 @@ public class LineItemController {
 		}
 		return jr;
 	}
+	
+//	@GetMapping("/lines-for-pr/{id}")
+//	public JsonResponse getLineItemsForPR(@PathVariable int id) {
+//		JsonResponse jr = null;
+//		Optional<LineItem> lineItem = lineItemRepo.
+//				
+//		
+//		return jr;
+//	}
 }
