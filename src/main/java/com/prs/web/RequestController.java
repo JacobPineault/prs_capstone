@@ -17,7 +17,6 @@ import com.prs.db.UserRepository;
 @RestController
 @RequestMapping("/requests")
 public class RequestController {
-
 	@Autowired
 	private RequestRepository requestRepo;
 	@Autowired
@@ -120,12 +119,47 @@ public class RequestController {
 		JsonResponse jr = null;
 		try {
 			User user = userRepo.findById(id).orElse(null);
-			List<Request> request = requestRepo.findByUserNotandStatus(user, "Review");
+			Iterable<Request> request = requestRepo.findAllByStatusAndUserNot("Review", user);
 			jr = JsonResponse.getInstance(request);
 		} catch (Exception e) {
 			jr = JsonResponse.getInstance(e);
 		}
 		return jr;
 	}
-
+	
+	@GetMapping("/approve")
+	public JsonResponse getApprove(@RequestBody Request r) {
+		JsonResponse jr = null;
+		try {
+			if (requestRepo.existsById(r.getId())) {
+				r.setStatus("Approved");
+				jr = JsonResponse.getInstance(requestRepo.save(r));
+			} else {
+				jr = JsonResponse
+						.getInstance("Request ID: " + r.getId() + " does not exist and you are attempting to save it");
+			}
+		} catch (Exception e) {
+			jr = JsonResponse.getInstance(e);
+		}
+		return jr;
+	}
+	
+	@GetMapping("/reject")
+	public JsonResponse getReject(@RequestBody Request r) {
+		JsonResponse jr = null;
+		try {
+			if (requestRepo.existsById(r.getId())) {
+				r.setStatus("Rejected");
+				jr = JsonResponse.getInstance(requestRepo.save(r));
+			} else {
+				jr = JsonResponse
+						.getInstance("Request ID: " + r.getId() + " does not exist and you are attempting to save it");
+			}
+		} catch (Exception e) {
+			jr = JsonResponse.getInstance(e);
+		}
+		return jr;
+	}
+	
+	
 }

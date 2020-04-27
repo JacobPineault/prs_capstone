@@ -9,14 +9,17 @@ import org.springframework.web.bind.annotation.*;
 
 import com.prs.business.JsonResponse;
 import com.prs.business.LineItem;
+import com.prs.business.Request;
 import com.prs.db.LineItemRepository;
+import com.prs.db.RequestRepository;
 
 @RestController
 @RequestMapping("/line-items")
 public class LineItemController {
-
 	@Autowired
 	private LineItemRepository lineItemRepo;
+	@Autowired
+	private RequestRepository requestRepo;
 
 	@GetMapping("/")
 	public JsonResponse list() {
@@ -62,10 +65,13 @@ public class LineItemController {
 	public JsonResponse updateLineItem(@RequestBody LineItem li) {
 		JsonResponse jr = null;
 		try {
-			li = lineItemRepo.save(li);
-			jr = JsonResponse.getInstance(li);
+			if (lineItemRepo.existsById(li.getId())) {
+				jr = JsonResponse.getInstance(lineItemRepo.save(li));
+				calculatePurchaseRequestTotal(li);
+			} else {
+				jr = JsonResponse.getInstance("Line Item ID: " + li.getId() + " does not exist and you are attempting to save it");
+			}
 		} catch (Exception e) {
-			jr = JsonResponse.getErrorInstance("Error updating line item: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return jr;
@@ -78,18 +84,55 @@ public class LineItemController {
 			lineItemRepo.deleteById(id);
 			jr = JsonResponse.getInstance("Line item with ID: " + id + " deleted successfully.");
 		} catch (Exception e) {
-			jr = JsonResponse.getErrorInstance("Error deleting line item: " + e.getMessage());
+			jr = JsonResponse.getInstance("Error deleting line item: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return jr;
 	}
+
+	@GetMapping("/lines-for-pr/{id}")
+	public JsonResponse getLineItemsForPurchaseRequest(@PathVariable int id) {
+		JsonResponse jr = null;
+		try {
+			if (requestRepo.existsById(id)) {
+				Request r = requestRepo.findById(id).orElse(null);
+				jr = JsonResponse.getInstance(lineItemRepo.findByRequest(r));
+			} else {
+				jr = JsonResponse.getInstance("No request for for ID: " + id);
+			}
+		} catch (Exception e) {
+			jr = JsonResponse.getInstance(e);
+		}
+		return jr;
+	}
 	
-//	@GetMapping("/lines-for-pr/{id}")
-//	public JsonResponse getLineItemsForPR(@PathVariable int id) {
-//		JsonResponse jr = null;
-//		Optional<LineItem> lineItem = lineItemRepo.
-//				
-//		
-//		return jr;
-//	}
+	private void calculatePurchaseRequestTotal(LineItem li) {
+		double sumTotal = 0;
+		Request r = li.getRequest();
+		Iterable<LineItem> lis = lineItemRepo.findByRequest(r);
+		for (LineItem rli : lis) {
+			sumTotal += rli.getQuantity() * rli.getProduct().getPrice();
+		}
+		li.getRequest().setTotal(sumTotal);
+		requestRepo.save(r);
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

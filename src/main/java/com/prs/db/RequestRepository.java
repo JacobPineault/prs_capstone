@@ -9,7 +9,7 @@ import com.prs.business.User;
 
 public interface RequestRepository extends JpaRepository<Request, Integer> {
 	
-	List<Request> findByUserNotandStatus(User user, String status);
+	List<Request> findAllByStatusAndUserNot(String status, User user);
 	
 	
 }
