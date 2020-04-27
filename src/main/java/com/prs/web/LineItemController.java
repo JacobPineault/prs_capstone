@@ -51,6 +51,7 @@ public class LineItemController {
 		try {
 			li = lineItemRepo.save(li);
 			jr = JsonResponse.getInstance(li);
+			calculatePurchaseRequestTotal(li);
 		} catch (DataIntegrityViolationException dive) {
 			jr = JsonResponse.getErrorInstance(dive.getRootCause().getMessage());
 			dive.printStackTrace();
@@ -69,7 +70,8 @@ public class LineItemController {
 				jr = JsonResponse.getInstance(lineItemRepo.save(li));
 				calculatePurchaseRequestTotal(li);
 			} else {
-				jr = JsonResponse.getInstance("Line Item ID: " + li.getId() + " does not exist and you are attempting to save it");
+				jr = JsonResponse.getInstance(
+						"Line Item ID: " + li.getId() + " does not exist and you are attempting to save it");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -81,7 +83,14 @@ public class LineItemController {
 	public JsonResponse deleteLineItem(@PathVariable int id) {
 		JsonResponse jr = null;
 		try {
-			lineItemRepo.deleteById(id);
+			if (lineItemRepo.existsById(id)) {
+				LineItem li = lineItemRepo.findById(id).orElse(null);
+				lineItemRepo.deleteById(id);
+				jr = JsonResponse.getInstance(li);
+				calculatePurchaseRequestTotal(li);
+			} else {
+				jr = JsonResponse.getInstance("Delete failed. No Lineitem found for ID: " + id);
+			}
 			jr = JsonResponse.getInstance("Line item with ID: " + id + " deleted successfully.");
 		} catch (Exception e) {
 			jr = JsonResponse.getInstance("Error deleting line item: " + e.getMessage());
@@ -105,7 +114,7 @@ public class LineItemController {
 		}
 		return jr;
 	}
-	
+
 	private void calculatePurchaseRequestTotal(LineItem li) {
 		double sumTotal = 0;
 		Request r = li.getRequest();
@@ -115,24 +124,6 @@ public class LineItemController {
 		}
 		li.getRequest().setTotal(sumTotal);
 		requestRepo.save(r);
-		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 }
