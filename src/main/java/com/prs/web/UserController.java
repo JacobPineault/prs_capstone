@@ -11,6 +11,7 @@ import com.prs.business.JsonResponse;
 import com.prs.business.User;
 import com.prs.db.UserRepository;
 
+@CrossOrigin()
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -57,7 +58,7 @@ public class UserController {
 		return jr;
 	}
 
-	@PutMapping("/")
+	@PutMapping("/") // check w/ Sean to see if we need ID for PUT mapping
 	public JsonResponse updateUser(@RequestBody User u) {
 		JsonResponse jr = null;
 		try {

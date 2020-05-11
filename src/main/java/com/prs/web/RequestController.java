@@ -14,6 +14,7 @@ import com.prs.business.User;
 import com.prs.db.RequestRepository;
 import com.prs.db.UserRepository;
 
+@CrossOrigin()
 @RestController
 @RequestMapping("/requests")
 public class RequestController {
@@ -118,16 +119,20 @@ public class RequestController {
 	public JsonResponse getRequestStatusReview(@PathVariable int id) {
 		JsonResponse jr = null;
 		try {
+			if (requestRepo.existsById(id)) {
 			User user = userRepo.findById(id).orElse(null);
 			Iterable<Request> request = requestRepo.findAllByStatusAndUserNot("Review", user);
-			jr = JsonResponse.getInstance(request);
+			jr = JsonResponse.getInstance(request);}
+		 else {
+			jr = JsonResponse.getInstance("No request found for " + id);
+		}
 		} catch (Exception e) {
 			jr = JsonResponse.getInstance(e);
 		}
 		return jr;
 	}
 	
-	@GetMapping("/approve")
+	@PutMapping("/approve")
 	public JsonResponse getApprove(@RequestBody Request r) {
 		JsonResponse jr = null;
 		try {
@@ -136,7 +141,7 @@ public class RequestController {
 				jr = JsonResponse.getInstance(requestRepo.save(r));
 			} else {
 				jr = JsonResponse
-						.getInstance("Request ID: " + r.getId() + " does not exist and you are attempting to save it");
+						.getInstance("Request ID: " + r.getId() + "does not exist and you are attempting to save it");
 			}
 		} catch (Exception e) {
 			jr = JsonResponse.getInstance(e);
@@ -144,7 +149,7 @@ public class RequestController {
 		return jr;
 	}
 	
-	@GetMapping("/reject")
+	@PutMapping("/reject")
 	public JsonResponse getReject(@RequestBody Request r) {
 		JsonResponse jr = null;
 		try {

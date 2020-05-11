@@ -12,7 +12,7 @@ public class Vendor {
 	private String address;
 	private String city;
 	private String state;
-	@Column(name = "zip")
+	//@Column(name = "zipCode")
 	private String zipCode;
 	private String phoneNumber;
 	private String email;
