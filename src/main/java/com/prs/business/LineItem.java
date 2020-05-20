@@ -23,13 +23,6 @@ public class LineItem {
 		this.quantity = quantity;
 	}
 
-	public LineItem(Request request, Product product, int quantity) {
-		super();
-		this.request = request;
-		this.product = product;
-		this.quantity = quantity;
-	}
-
 	public LineItem() {
 		super();
 	}

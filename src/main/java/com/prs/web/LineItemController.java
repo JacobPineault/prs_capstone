@@ -13,7 +13,7 @@ import com.prs.business.Request;
 import com.prs.db.LineItemRepository;
 import com.prs.db.RequestRepository;
 
-@CrossOrigin()
+@CrossOrigin
 @RestController
 @RequestMapping("/line-items")
 public class LineItemController {
@@ -108,13 +108,14 @@ public class LineItemController {
 		return jr;
 	}
 
+	// original
 	@GetMapping("/lines-for-pr/{id}")
 	public JsonResponse getLineItemsForPurchaseRequest(@PathVariable int id) {
 		JsonResponse jr = null;
 		try {
 			if (requestRepo.existsById(id)) {
 				Request r = requestRepo.findById(id).orElse(null);
-				jr = JsonResponse.getInstance(lineItemRepo.findByRequest(r));
+				jr = JsonResponse.getInstance(lineItemRepo.findAllByRequest(r));
 			} else {
 				jr = JsonResponse.getInstance("No request for for ID: " + id);
 			}
@@ -127,12 +128,12 @@ public class LineItemController {
 	private void calculatePurchaseRequestTotal(LineItem li) {
 		double sumTotal = 0;
 		Request r = li.getRequest();
-		Iterable<LineItem> lis = lineItemRepo.findByRequest(r);
+		Iterable<LineItem> lis = lineItemRepo.findAllByRequest(r);
 		for (LineItem rli : lis) {
 			sumTotal += rli.getQuantity() * rli.getProduct().getPrice();
 		}
 		li.getRequest().setTotal(sumTotal);
 		requestRepo.save(r);
 	}
-
+	
 }

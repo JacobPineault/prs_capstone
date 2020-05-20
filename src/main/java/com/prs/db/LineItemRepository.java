@@ -7,6 +7,6 @@ import com.prs.business.Request;
 
 public interface LineItemRepository extends JpaRepository<LineItem, Integer> {
 
-	Iterable<LineItem> findByRequest(Request request);
+	Iterable<LineItem> findAllByRequest(Request request);
 
 }

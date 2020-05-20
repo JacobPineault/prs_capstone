@@ -14,7 +14,7 @@ import com.prs.business.User;
 import com.prs.db.RequestRepository;
 import com.prs.db.UserRepository;
 
-@CrossOrigin()
+@CrossOrigin
 @RestController
 @RequestMapping("/requests")
 public class RequestController {
@@ -119,7 +119,7 @@ public class RequestController {
 	public JsonResponse getRequestStatusReview(@PathVariable int id) {
 		JsonResponse jr = null;
 		try {
-			if (requestRepo.existsById(id)) {
+			if (userRepo.existsById(id)) {
 			User user = userRepo.findById(id).orElse(null);
 			Iterable<Request> request = requestRepo.findAllByStatusAndUserNot("Review", user);
 			jr = JsonResponse.getInstance(request);}

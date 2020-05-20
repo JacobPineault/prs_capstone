@@ -11,7 +11,7 @@ import com.prs.business.JsonResponse;
 import com.prs.business.User;
 import com.prs.db.UserRepository;
 
-@CrossOrigin()
+@CrossOrigin
 @RestController
 @RequestMapping("/users")
 public class UserController {
